@@ -16,3 +16,6 @@ __pycache__/
 
 *.pyo
 
+# Configuration files with sensitive information
+credentials.json
+
