@@ -26,13 +26,34 @@ from colab_leecher.utility.variables import (
 
 def isLink(_, __, update):
     if update.text:
-        if "/content/" in str(update.text) or "/home" in str(update.text):
+        text = str(update.text).strip()
+        
+        # Linux/Colab 路径
+        if "/content/" in text or "/home" in text:
             return True
-        elif update.text.startswith("magnet:?xt=urn:btih:"):
+        
+        # Windows 绝对路径 (C:\, D:\, etc.)
+        elif len(text) >= 3 and text[1:3] == ":\\" and text[0].isalpha():
+            return True
+        
+        # Windows 路径使用正斜杠 (C:/, D:/, etc.)
+        elif len(text) >= 3 and text[1:3] == ":/" and text[0].isalpha():
+            return True
+        
+        # Windows 网络路径 (\\server\share)
+        elif text.startswith("\\\\"):
+            return True
+        
+        # 相对路径 (.\folder, ./folder, ..\folder, ../folder)
+        elif text.startswith(".\\") or text.startswith("./") or text.startswith("..\\") or text.startswith("../"):
+            return True
+        
+        # 磁力链接
+        elif text.startswith("magnet:?xt=urn:btih:"):
             return True
 
-        parsed = urlparse(update.text)
-
+        # URL 链接检查
+        parsed = urlparse(text)
         if parsed.scheme in ("http", "https") and parsed.netloc:
             return True
 
