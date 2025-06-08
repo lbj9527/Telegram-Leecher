@@ -132,12 +132,19 @@ async def taskScheduler():
         makedirs(Paths.down_path)
     Messages.link_p = str(DUMP_ID)[4:]
 
-    try:
-        system(f"aria2c -d {Paths.WORK_PATH} -o Hero.jpg {Aria2c.pic_dwn_url}")
-    except Exception:
-        Paths.HERO_IMAGE = Paths.DEFAULT_HERO
+    # try:
+    #     system(f"aria2c -d {Paths.WORK_PATH} -o Hero.jpg {Aria2c.pic_dwn_url}")
+    # except Exception:
+    #     Paths.HERO_IMAGE = Paths.DEFAULT_HERO
+    
+    # Use default hero image instead of downloading
+    Paths.HERO_IMAGE = Paths.DEFAULT_HERO
 
-    MSG.sent_msg = await colab_bot.send_message(chat_id=DUMP_ID, text=src_text[0])
+    try:
+        MSG.sent_msg = await colab_bot.send_message(chat_id=DUMP_ID, text=src_text[0])
+    except Exception as e:
+        logging.warning(f"Failed to send to DUMP_ID {DUMP_ID}, using OWNER instead: {e}")
+        MSG.sent_msg = await colab_bot.send_message(chat_id=OWNER, text=src_text[0])
 
     if len(src_text) > 1:
         for lin in range(1, len(src_text)):

@@ -9,6 +9,7 @@ testing_purpose/
 __pycache__/
 
 *.session
+*.session-journal
 
 .venv/
 

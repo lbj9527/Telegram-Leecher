@@ -1,6 +1,7 @@
 # copyright 2023 © Xron Trix | https://github.com/Xrontrix10
 
 
+import os
 from time import time
 from datetime import datetime
 from pyrogram.types import Message
@@ -71,20 +72,22 @@ class BotTimes:
 
 
 class Paths:
-    WORK_PATH = "/content/Telegram-Leecher/BOT_WORK"
-    THMB_PATH = "/content/Telegram-Leecher/colab_leecher/Thumbnail.jpg"
-    VIDEO_FRAME = f"{WORK_PATH}/video_frame.jpg"
-    HERO_IMAGE = f"{WORK_PATH}/Hero.jpg"
-    DEFAULT_HERO =  "/content/Telegram-Leecher/custom_thmb.jpg"
-    MOUNTED_DRIVE = "/content/drive"
-    down_path = f"{WORK_PATH}/Downloads"
-    temp_dirleech_path = f"{WORK_PATH}/dir_leech_temp"
-    mirror_dir = "/content/drive/MyDrive/Colab Leecher Uploads"
-    temp_zpath = f"{WORK_PATH}/Leeched_Files"
-    temp_unzip_path = f"{WORK_PATH}/Unzipped_Files"
-    temp_files_dir = f"{WORK_PATH}/leech_temp"
-    thumbnail_ytdl = f"{WORK_PATH}/ytdl_thumbnails"
-    access_token = "/content/token.pickle"
+    # Use current working directory as base path for cross-platform compatibility
+    BASE_PATH = os.getcwd()
+    WORK_PATH = os.path.join(BASE_PATH, "BOT_WORK")
+    THMB_PATH = os.path.join(BASE_PATH, "colab_leecher", "Thumbnail.jpg")
+    VIDEO_FRAME = os.path.join(WORK_PATH, "video_frame.jpg")
+    HERO_IMAGE = os.path.join(WORK_PATH, "Hero.jpg")
+    DEFAULT_HERO = os.path.join(BASE_PATH, "custom_thmb.jpg")
+    MOUNTED_DRIVE = os.path.join(BASE_PATH, "drive")
+    down_path = os.path.join(WORK_PATH, "Downloads")
+    temp_dirleech_path = os.path.join(WORK_PATH, "dir_leech_temp")
+    mirror_dir = os.path.join(BASE_PATH, "drive", "MyDrive", "Colab Leecher Uploads")
+    temp_zpath = os.path.join(WORK_PATH, "Leeched_Files")
+    temp_unzip_path = os.path.join(WORK_PATH, "Unzipped_Files")
+    temp_files_dir = os.path.join(WORK_PATH, "leech_temp")
+    thumbnail_ytdl = os.path.join(WORK_PATH, "ytdl_thumbnails")
+    access_token = os.path.join(BASE_PATH, "token.pickle")
 
 
 class Messages:
