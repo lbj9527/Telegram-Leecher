@@ -107,7 +107,6 @@ async def downloadManager(source, is_ytdl: bool):
 
 
 async def calDownSize(sources):
-    global TRANSFER_INFO
     for link in natsorted(sources):
         if is_google_drive(link):
             await build_service()
@@ -131,16 +130,17 @@ async def calDownSize(sources):
         elif is_telegram(link):
             media, _ = await media_Identifier(link)
             if media is not None:
-                size = media.file_size
+                size = getattr(media, 'file_size', 0)
                 Transfer.total_down_size += size
+                logging.info(f"Telegram文件大小计算: {size} bytes")
             else:
-                logging.error("Couldn't Download Telegram Message")
+                logging.error(f"无法获取Telegram文件大小: {link}")
+                # 不要立即退出，让media_Identifier处理错误
         else:
             pass
 
 
 async def get_d_name(link: str):
-    global Messages, Gdrive
     if len(BOT.Options.custom_name) != 0:
         Messages.download_name = BOT.Options.custom_name
         return
@@ -150,7 +150,10 @@ async def get_d_name(link: str):
         Messages.download_name = meta["name"]
     elif is_telegram(link):
         media, _ = await media_Identifier(link)
-        Messages.download_name = media.file_name if hasattr(media, "file_name") else "None"  # type: ignore
+        if media is not None and hasattr(media, "file_name") and media.file_name:
+            Messages.download_name = media.file_name
+        else:
+            Messages.download_name = "telegram_media"  # 默认名称
     elif is_ytdl_link(link):
         Messages.download_name = await get_YT_Name(link)
     elif is_mega(link):
